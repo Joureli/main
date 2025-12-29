@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sign Up - Joureli</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Arial, sans-serif;
+			background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+			color: #2b3a67;
+			line-height: 1.6;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+		}
+
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes slideInLeft {
+			from {
+				opacity: 0;
+				transform: translateX(-30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		.signup-container {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 40px;
+			max-width: 1200px;
+			width: 100%;
+			align-items: center;
+		}
+
+		/* Left Side - Features */
+		.signup-left {
+			animation: slideInLeft 0.8s ease-out;
+		}
+
+		.signup-left h1 {
+			font-size: 3rem;
+			margin-bottom: 20px;
+			color: #2b3a67;
+			line-height: 1.2;
+		}
+
+		.signup-left p {
+			font-size: 1.1rem;
+			color: #4f5d75;
+			margin-bottom: 40px;
+			line-height: 1.8;
+		}
+
+		.feature-list {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
+
+		.feature-item {
+			display: flex;
+			gap: 16px;
+			padding: 16px;
+			background: rgba(255, 255, 255, 0.8);
+			border-radius: 12px;
+			border-left: 4px solid #2b3a67;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+			transition: all 0.3s ease;
+		}
+
+		.feature-item:nth-child(1) { animation-delay: 0.1s; }
+		.feature-item:nth-child(2) { animation-delay: 0.2s; }
+		.feature-item:nth-child(3) { animation-delay: 0.3s; }
+
+		.feature-item:hover {
+			transform: translateX(10px);
+			box-shadow: 0 10px 30px rgba(43, 58, 103, 0.15);
+			border-left-color: #4056a1;
+		}
+
+		.feature-icon {
+			font-size: 2rem;
+			min-width: 50px;
+			text-align: center;
+		}
+
+		.feature-content h3 {
+			font-size: 1.1rem;
+			margin-bottom: 6px;
+			color: #2b3a67;
+		}
+
+		.feature-content p {
+			font-size: 0.9rem;
+			color: #4f5d75;
+			margin: 0;
+		}
+
+		/* Right Side - Form */
+		.signup-right {
+			animation: fadeInUp 0.8s ease-out 0.2s backwards;
+		}
+
+		.signup-form {
+			background: white;
+			padding: 40px;
+			border-radius: 16px;
+			box-shadow: 0 10px 40px rgba(43, 58, 103, 0.1);
+			border: 1px solid rgba(43, 58, 103, 0.08);
+		}
+
+		.form-header {
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		.form-header h2 {
+			font-size: 2rem;
+			margin-bottom: 8px;
+			color: #2b3a67;
+		}
+
+		.form-header p {
+			color: #4f5d75;
+			font-size: 0.95rem;
+		}
+
+		.form-group {
+			margin-bottom: 20px;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+		}
+
+		.form-group:nth-child(1) { animation-delay: 0.3s; }
+		.form-group:nth-child(2) { animation-delay: 0.4s; }
+		.form-group:nth-child(3) { animation-delay: 0.5s; }
+		.form-group:nth-child(4) { animation-delay: 0.6s; }
+		.form-group:nth-child(5) { animation-delay: 0.7s; }
+		.form-group:nth-child(6) { animation-delay: 0.8s; }
+
+		label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: 600;
+			color: #2b3a67;
+			font-size: 0.95rem;
+		}
+
+		input, select {
+			width: 100%;
+			padding: 12px 14px;
+			border: 2px solid #e0e7f1;
+			border-radius: 8px;
+			font-family: inherit;
+			font-size: 1rem;
+			color: #2b3a67;
+			transition: all 0.3s ease;
+		}
+
+		input::placeholder {
+			color: #a0a9bd;
+		}
+
+		input:focus, select:focus {
+			outline: none;
+			border-color: #2b3a67;
+			box-shadow: 0 0 0 3px rgba(43, 58, 103, 0.1);
+		}
+
+		.form-row {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 16px;
+		}
+
+		.form-row .form-group {
+			margin-bottom: 0;
+		}
+
+		.password-requirements {
+			font-size: 0.85rem;
+			color: #4f5d75;
+			margin-top: 8px;
+			padding: 12px;
+			background: rgba(43, 58, 103, 0.05);
+			border-radius: 6px;
+			display: none;
+		}
+
+		.password-requirements.show {
+			display: block;
+		}
+
+		.requirement {
+			margin: 4px 0;
+		}
+
+		.requirement.met {
+			color: #10b981;
+		}
+
+		.requirement::before {
+			content: '○ ';
+			margin-right: 6px;
+		}
+
+		.requirement.met::before {
+			content: '✓ ';
+		}
+
+		.checkbox-group {
+			display: flex;
+			align-items: flex-start;
+			gap: 12px;
+			margin-bottom: 20px;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+		}
+
+		.checkbox-group:nth-child(7) { animation-delay: 0.8s; }
+		.checkbox-group:nth-child(8) { animation-delay: 0.9s; }
+
+		.checkbox-group input[type="checkbox"] {
+			width: 18px;
+			height: 18px;
+			min-width: 18px;
+			margin-top: 2px;
+			cursor: pointer;
+		}
+
+		.checkbox-label {
+			font-size: 0.9rem;
+			color: #4f5d75;
+			cursor: pointer;
+			margin: 0;
+			font-weight: 400;
+		}
+
+		.checkbox-label a {
+			color: #2b3a67;
+			text-decoration: none;
+			font-weight: 600;
+			transition: color 0.3s ease;
+		}
+
+		.checkbox-label a:hover {
+			color: #4056a1;
+			text-decoration: underline;
+		}
+
+		.submit-btn {
+			width: 100%;
+			padding: 14px;
+			background: linear-gradient(120deg, #2b3a67, #4056a1);
+			color: white;
+			border: none;
+			border-radius: 8px;
+			font-size: 1rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			margin-top: 10px;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.submit-btn:nth-of-type(1) { animation-delay: 0.9s; }
+
+		.submit-btn::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+			transition: left 0.5s ease;
+		}
+
+		.submit-btn:hover::before {
+			left: 100%;
+		}
+
+		.submit-btn:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 10px 25px rgba(43, 58, 103, 0.3);
+		}
+
+		.submit-btn:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+			transform: none;
+		}
+
+		.login-link {
+			text-align: center;
+			margin-top: 20px;
+			font-size: 0.95rem;
+			color: #4f5d75;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+			animation-delay: 1s;
+		}
+
+		.login-link a {
+			color: #2b3a67;
+			text-decoration: none;
+			font-weight: 600;
+			transition: color 0.3s ease;
+		}
+
+		.login-link a:hover {
+			color: #4056a1;
+		}
+
+		.error-message {
+			color: #ef4444;
+			font-size: 0.9rem;
+			margin-top: 4px;
+			display: none;
+		}
+
+		.error-message.show {
+			display: block;
+		}
+
+		.success-message {
+			color: #10b981;
+			font-size: 0.9rem;
+			margin-top: 4px;
+			display: none;
+		}
+
+		.success-message.show {
+			display: block;
+		}
+
+		/* Responsive */
+		@media (max-width: 768px) {
+			.signup-container {
+				grid-template-columns: 1fr;
+				gap: 30px;
+			}
+
+			.signup-left {
+				text-align: center;
+			}
+
+			.signup-left h1 {
+				font-size: 2rem;
+			}
+
+			.feature-item {
+				flex-direction: column;
+				text-align: center;
+			}
+
+			.feature-icon {
+				font-size: 2.5rem;
+			}
+
+			.form-row {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="signup-container">
+		<!-- Left Side -->
+		<div class="signup-left">
+			<h1>Join Joureli Today</h1>
+			<p>Start your journey of self-discovery and mindful reflection. Create your account and unlock a world of personal growth.</p>
+			
+			<div class="feature-list">
+				<div class="feature-item">
+					<div class="feature-icon">📔</div>
+					<div class="feature-content">
+						<h3>Unlimited Entries</h3>
+						<p>Write as much as you want, whenever you want.</p>
+					</div>
+				</div>
+				<div class="feature-item">
+					<div class="feature-icon">🔒</div>
+					<div class="feature-content">
+						<h3>100% Private & Secure</h3>
+						<p>Your thoughts are for your eyes only.</p>
+					</div>
+				</div>
+				<div class="feature-item">
+					<div class="feature-icon">☁️</div>
+					<div class="feature-content">
+						<h3>Sync Everywhere</h3>
+						<p>Access your journal on any device, anytime.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Right Side - Form -->
+		<div class="signup-right">
+			<form class="signup-form" id="signupForm">
+				<div class="form-header">
+					<h2>Create Account</h2>
+					<p>It only takes a minute</p>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group">
+						<label for="firstName">First Name</label>
+						<input type="text" id="firstName" name="firstName" placeholder="John" required>
+						<div class="error-message"></div>
+					</div>
+					<div class="form-group">
+						<label for="lastName">Last Name</label>
+						<input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+						<div class="error-message"></div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="email">Email Address</label>
+					<input type="email" id="email" name="email" placeholder="you@example.com" required>
+					<div class="error-message"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" placeholder="••••••••" required>
+					<div class="password-requirements" id="passwordRequirements">
+						<div class="requirement" data-requirement="length">At least 8 characters</div>
+						<div class="requirement" data-requirement="uppercase">One uppercase letter</div>
+						<div class="requirement" data-requirement="lowercase">One lowercase letter</div>
+						<div class="requirement" data-requirement="number">One number</div>
+					</div>
+					<div class="error-message"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="confirmPassword">Confirm Password</label>
+					<input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required>
+					<div class="error-message"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="timezone">Timezone (Optional)</label>
+					<select id="timezone" name="timezone">
+						<option value="">Select your timezone</option>
+						<option value="UTC-8">Pacific Time (UTC-8)</option>
+						<option value="UTC-7">Mountain Time (UTC-7)</option>
+						<option value="UTC-6">Central Time (UTC-6)</option>
+						<option value="UTC-5">Eastern Time (UTC-5)</option>
+						<option value="UTC">GMT/UTC (UTC+0)</option>
+						<option value="UTC+1">Central European Time (UTC+1)</option>
+						<option value="UTC+8">Singapore/Hong Kong (UTC+8)</option>
+						<option value="UTC+9">Japan Standard Time (UTC+9)</option>
+						<option value="UTC+10">Australian Eastern (UTC+10)</option>
+					</select>
+				</div>
+
+				<div class="checkbox-group">
+					<input type="checkbox" id="terms" name="terms" required>
+					<label for="terms" class="checkbox-label">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+				</div>
+
+				<div class="checkbox-group">
+					<input type="checkbox" id="updates" name="updates">
+					<label for="updates" class="checkbox-label">Send me tips and updates about journaling</label>
+				</div>
+
+				<button type="submit" class="submit-btn">Create Account</button>
+
+				<div class="login-link">
+					Already have an account? <a href="#">Sign In</a>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script>
+		const form = document.getElementById('signupForm');
+		const passwordInput = document.getElementById('password');
+		const passwordRequirements = document.getElementById('passwordRequirements');
+
+		// Password strength validation
+		const requirements = {
+			length: (password) => password.length >= 8,
+			uppercase: (password) => /[A-Z]/.test(password),
+			lowercase: (password) => /[a-z]/.test(password),
+			number: (password) => /\d/.test(password)
+		};
+
+		passwordInput.addEventListener('focus', () => {
+			passwordRequirements.classList.add('show');
+		});
+
+		passwordInput.addEventListener('input', (e) => {
+			const password = e.target.value;
+
+			for (const [key, validator] of Object.entries(requirements)) {
+				const element = document.querySelector(`[data-requirement="${key}"]`);
+				if (validator(password)) {
+					element.classList.add('met');
+				} else {
+					element.classList.remove('met');
+				}
+			}
+		});
+
+		// Form validation
+		function validateForm() {
+			let isValid = true;
+
+			// Clear previous error messages
+			document.querySelectorAll('.error-message').forEach(el => {
+				el.classList.remove('show');
+				el.textContent = '';
+			});
+
+			// Validate first name
+			const firstName = document.getElementById('firstName').value.trim();
+			if (!firstName) {
+				showError('firstName', 'First name is required');
+				isValid = false;
+			}
+
+			// Validate last name
+			const lastName = document.getElementById('lastName').value.trim();
+			if (!lastName) {
+				showError('lastName', 'Last name is required');
+				isValid = false;
+			}
+
+			// Validate email
+			const email = document.getElementById('email').value.trim();
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!email) {
+				showError('email', 'Email is required');
+				isValid = false;
+			} else if (!emailRegex.test(email)) {
+				showError('email', 'Please enter a valid email address');
+				isValid = false;
+			}
+
+			// Validate password
+			const password = document.getElementById('password').value;
+			if (!password) {
+				showError('password', 'Password is required');
+				isValid = false;
+			} else {
+				const failedRequirements = [];
+				for (const [key, validator] of Object.entries(requirements)) {
+					if (!validator(password)) {
+						failedRequirements.push(key);
+					}
+				}
+				if (failedRequirements.length > 0) {
+					showError('password', 'Password does not meet requirements');
+					isValid = false;
+				}
+			}
+
+			// Validate confirm password
+			const confirmPassword = document.getElementById('confirmPassword').value;
+			if (!confirmPassword) {
+				showError('confirmPassword', 'Please confirm your password');
+				isValid = false;
+			} else if (password !== confirmPassword) {
+				showError('confirmPassword', 'Passwords do not match');
+				isValid = false;
+			}
+
+			// Validate terms
+			const terms = document.getElementById('terms').checked;
+			if (!terms) {
+				const termsGroup = document.querySelector('input[name="terms"]').closest('.checkbox-group');
+				const error = document.createElement('div');
+				error.className = 'error-message show';
+				error.textContent = 'You must accept the terms to continue';
+				termsGroup.appendChild(error);
+				isValid = false;
+			}
+
+			return isValid;
+		}
+
+		function showError(fieldName, message) {
+			const field = document.getElementById(fieldName);
+			const errorElement = field.nextElementSibling;
+			if (errorElement && errorElement.classList.contains('error-message')) {
+				errorElement.textContent = message;
+				errorElement.classList.add('show');
+			} else if (errorElement && errorElement.classList.contains('password-requirements')) {
+				const nextElement = errorElement.nextElementSibling;
+				if (nextElement && nextElement.classList.contains('error-message')) {
+					nextElement.textContent = message;
+					nextElement.classList.add('show');
+				}
+			}
+		}
+
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+
+			if (validateForm()) {
+				// Collect form data
+				const formData = {
+					firstName: document.getElementById('firstName').value,
+					lastName: document.getElementById('lastName').value,
+					email: document.getElementById('email').value,
+					timezone: document.getElementById('timezone').value,
+					updates: document.getElementById('updates').checked
+				};
+
+				// Save to localStorage
+				localStorage.setItem('joureviUser', JSON.stringify(formData));
+
+				// Show success message
+				const submitBtn = form.querySelector('.submit-btn');
+				const originalText = submitBtn.textContent;
+				submitBtn.textContent = 'Account Created! Redirecting...';
+				submitBtn.disabled = true;
+
+				// Redirect after 2 seconds
+				setTimeout(() => {
+					window.location.href = 'calendar.html';
+				}, 2000);
+			}
+		});
+
+		// Add real-time validation feedback
+		document.getElementById('firstName').addEventListener('blur', function() {
+			if (!this.value.trim()) {
+				showError('firstName', 'First name is required');
+			} else {
+				this.nextElementSibling.classList.remove('show');
+			}
+		});
+
+		document.getElementById('lastName').addEventListener('blur', function() {
+			if (!this.value.trim()) {
+				showError('lastName', 'Last name is required');
+			} else {
+				this.nextElementSibling.classList.remove('show');
+			}
+		});
+
+		document.getElementById('email').addEventListener('blur', function() {
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!this.value.trim()) {
+				showError('email', 'Email is required');
+			} else if (!emailRegex.test(this.value)) {
+				showError('email', 'Please enter a valid email address');
+			} else {
+				this.nextElementSibling.classList.remove('show');
+			}
+		});
+
+		document.getElementById('confirmPassword').addEventListener('blur', function() {
+			const password = document.getElementById('password').value;
+			if (!this.value) {
+				showError('confirmPassword', 'Please confirm your password');
+			} else if (this.value !== password) {
+				showError('confirmPassword', 'Passwords do not match');
+			} else {
+				this.nextElementSibling.classList.remove('show');
+			}
+		});
+	</script>
+</body>
+</html>
