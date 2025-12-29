@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sign In - Joureli</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Arial, sans-serif;
+			background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+			color: #2b3a67;
+			line-height: 1.6;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+		}
+
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes slideInRight {
+			from {
+				opacity: 0;
+				transform: translateX(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		.login-container {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 40px;
+			max-width: 1200px;
+			width: 100%;
+			align-items: center;
+		}
+
+		/* Left Side - Welcome Message */
+		.login-left {
+			animation: fadeInUp 0.8s ease-out;
+		}
+
+		.login-left h1 {
+			font-size: 3rem;
+			margin-bottom: 20px;
+			color: #2b3a67;
+			line-height: 1.2;
+		}
+
+		.login-left p {
+			font-size: 1.1rem;
+			color: #4f5d75;
+			margin-bottom: 40px;
+			line-height: 1.8;
+		}
+
+		.benefits-list {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
+
+		.benefit-item {
+			display: flex;
+			gap: 16px;
+			padding: 16px;
+			background: rgba(255, 255, 255, 0.8);
+			border-radius: 12px;
+			border-left: 4px solid #2b3a67;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+			transition: all 0.3s ease;
+		}
+
+		.benefit-item:nth-child(1) { animation-delay: 0.1s; }
+		.benefit-item:nth-child(2) { animation-delay: 0.2s; }
+		.benefit-item:nth-child(3) { animation-delay: 0.3s; }
+
+		.benefit-item:hover {
+			transform: translateX(10px);
+			box-shadow: 0 10px 30px rgba(43, 58, 103, 0.15);
+			border-left-color: #4056a1;
+		}
+
+		.benefit-icon {
+			font-size: 2rem;
+			min-width: 50px;
+			text-align: center;
+		}
+
+		.benefit-content h3 {
+			font-size: 1.1rem;
+			margin-bottom: 6px;
+			color: #2b3a67;
+		}
+
+		.benefit-content p {
+			font-size: 0.9rem;
+			color: #4f5d75;
+			margin: 0;
+		}
+
+		/* Right Side - Form */
+		.login-right {
+			animation: slideInRight 0.8s ease-out 0.2s backwards;
+		}
+
+		.login-form {
+			background: white;
+			padding: 40px;
+			border-radius: 16px;
+			box-shadow: 0 10px 40px rgba(43, 58, 103, 0.1);
+			border: 1px solid rgba(43, 58, 103, 0.08);
+		}
+
+		.form-header {
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		.form-header h2 {
+			font-size: 2rem;
+			margin-bottom: 8px;
+			color: #2b3a67;
+		}
+
+		.form-header p {
+			color: #4f5d75;
+			font-size: 0.95rem;
+		}
+
+		.form-group {
+			margin-bottom: 20px;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+		}
+
+		.form-group:nth-child(1) { animation-delay: 0.3s; }
+		.form-group:nth-child(2) { animation-delay: 0.4s; }
+		.form-group:nth-child(3) { animation-delay: 0.5s; }
+
+		label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: 600;
+			color: #2b3a67;
+			font-size: 0.95rem;
+		}
+
+		input {
+			width: 100%;
+			padding: 12px 14px;
+			border: 2px solid #e0e7f1;
+			border-radius: 8px;
+			font-family: inherit;
+			font-size: 1rem;
+			color: #2b3a67;
+			transition: all 0.3s ease;
+		}
+
+		input::placeholder {
+			color: #a0a9bd;
+		}
+
+		input:focus {
+			outline: none;
+			border-color: #2b3a67;
+			box-shadow: 0 0 0 3px rgba(43, 58, 103, 0.1);
+		}
+
+		.form-footer {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 20px;
+			font-size: 0.9rem;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+			animation-delay: 0.5s;
+		}
+
+		.remember-me {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.remember-me input {
+			width: 18px;
+			height: 18px;
+			margin: 0;
+		}
+
+		.remember-me label {
+			margin: 0;
+			font-weight: 400;
+			font-size: 0.9rem;
+			cursor: pointer;
+		}
+
+		.forgot-password {
+			color: #2b3a67;
+			text-decoration: none;
+			font-weight: 600;
+			transition: color 0.3s ease;
+		}
+
+		.forgot-password:hover {
+			color: #4056a1;
+		}
+
+		.submit-btn {
+			width: 100%;
+			padding: 14px;
+			background: linear-gradient(120deg, #2b3a67, #4056a1);
+			color: white;
+			border: none;
+			border-radius: 8px;
+			font-size: 1rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+			position: relative;
+			overflow: hidden;
+			animation-delay: 0.6s;
+		}
+
+		.submit-btn::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+			transition: left 0.5s ease;
+		}
+
+		.submit-btn:hover::before {
+			left: 100%;
+		}
+
+		.submit-btn:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 10px 25px rgba(43, 58, 103, 0.3);
+		}
+
+		.submit-btn:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+			transform: none;
+		}
+
+		.divider {
+			display: flex;
+			align-items: center;
+			margin: 24px 0;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+			animation-delay: 0.6s;
+		}
+
+		.divider::before,
+		.divider::after {
+			content: '';
+			flex: 1;
+			height: 1px;
+			background: #e0e7f1;
+		}
+
+		.divider span {
+			margin: 0 12px;
+			color: #a0a9bd;
+			font-size: 0.85rem;
+		}
+
+		.social-login {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 12px;
+			margin-bottom: 20px;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+			animation-delay: 0.7s;
+		}
+
+		.social-btn {
+			padding: 12px;
+			border: 2px solid #e0e7f1;
+			background: white;
+			border-radius: 8px;
+			cursor: pointer;
+			font-weight: 600;
+			color: #2b3a67;
+			transition: all 0.3s ease;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+		}
+
+		.social-btn:hover {
+			border-color: #2b3a67;
+			box-shadow: 0 4px 12px rgba(43, 58, 103, 0.1);
+			transform: translateY(-2px);
+		}
+
+		.signup-link {
+			text-align: center;
+			margin-top: 20px;
+			font-size: 0.95rem;
+			color: #4f5d75;
+			opacity: 0;
+			animation: fadeInUp 0.6s ease-out forwards;
+			animation-delay: 0.8s;
+		}
+
+		.signup-link a {
+			color: #2b3a67;
+			text-decoration: none;
+			font-weight: 600;
+			transition: color 0.3s ease;
+		}
+
+		.signup-link a:hover {
+			color: #4056a1;
+		}
+
+		.error-message {
+			color: #ef4444;
+			font-size: 0.9rem;
+			margin-top: 4px;
+			display: none;
+			padding: 12px;
+			background: rgba(239, 68, 68, 0.1);
+			border-radius: 6px;
+			border-left: 3px solid #ef4444;
+		}
+
+		.error-message.show {
+			display: block;
+		}
+
+		.success-message {
+			color: #10b981;
+			font-size: 0.9rem;
+			padding: 12px;
+			background: rgba(16, 185, 129, 0.1);
+			border-radius: 6px;
+			border-left: 3px solid #10b981;
+			margin-bottom: 20px;
+			display: none;
+		}
+
+		.success-message.show {
+			display: block;
+		}
+
+		/* Responsive */
+		@media (max-width: 768px) {
+			.login-container {
+				grid-template-columns: 1fr;
+				gap: 30px;
+			}
+
+			.login-left {
+				text-align: center;
+			}
+
+			.login-left h1 {
+				font-size: 2rem;
+			}
+
+			.benefit-item {
+				flex-direction: column;
+				text-align: center;
+			}
+
+			.benefit-icon {
+				font-size: 2.5rem;
+			}
+
+			.form-footer {
+				flex-direction: column;
+				gap: 12px;
+				align-items: flex-start;
+			}
+
+			.social-login {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="login-container">
+		<!-- Left Side -->
+		<div class="login-left">
+			<h1>Welcome Back</h1>
+			<p>Continue your journey of self-reflection and personal growth. Your journal awaits.</p>
+			
+			<div class="benefits-list">
+				<div class="benefit-item">
+					<div class="benefit-icon">📔</div>
+					<div class="benefit-content">
+						<h3>Your Stories</h3>
+						<p>Access all your precious memories and reflections.</p>
+					</div>
+				</div>
+				<div class="benefit-item">
+					<div class="benefit-icon">📊</div>
+					<div class="benefit-content">
+						<h3>Track Progress</h3>
+						<p>See how much you've grown and learned.</p>
+					</div>
+				</div>
+				<div class="benefit-item">
+					<div class="benefit-icon">🔐</div>
+					<div class="benefit-content">
+						<h3>Always Safe</h3>
+						<p>Your privacy and security are protected.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Right Side - Form -->
+		<div class="login-right">
+			<form class="login-form" id="loginForm">
+				<div class="form-header">
+					<h2>Welcome to Joureli</h2>
+					<p>Sign in to your account</p>
+				</div>
+
+				<div class="success-message" id="successMessage">
+					Account created successfully! Signing you in...
+				</div>
+
+				<div class="form-group">
+					<label for="email">Email Address</label>
+					<input type="email" id="email" name="email" placeholder="you@example.com" required>
+					<div class="error-message"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" placeholder="••••••••" required>
+					<div class="error-message"></div>
+				</div>
+
+				<div class="form-footer">
+					<div class="remember-me">
+						<input type="checkbox" id="rememberMe" name="rememberMe">
+						<label for="rememberMe">Remember me</label>
+					</div>
+					<a href="#" class="forgot-password">Forgot password?</a>
+				</div>
+
+				<button type="submit" class="submit-btn">Sign In</button>
+
+				<div class="divider">
+					<span>or</span>
+				</div>
+
+				<div class="social-login">
+					<button type="button" class="social-btn" onclick="socialLogin('google')">
+						<span>🔵</span> Google
+					</button>
+					<button type="button" class="social-btn" onclick="socialLogin('microsoft')">
+						<span>⊞</span> Microsoft
+					</button>
+				</div>
+
+				<div class="signup-link">
+					Don't have an account? <a href="signup.html">Create one</a>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script>
+		const form = document.getElementById('loginForm');
+		const emailInput = document.getElementById('email');
+		const passwordInput = document.getElementById('password');
+		const rememberMe = document.getElementById('rememberMe');
+
+		// Check if user just signed up
+		window.addEventListener('load', () => {
+			const user = localStorage.getItem('joureviUser');
+			if (user && !sessionStorage.getItem('loginAttempted')) {
+				const successMessage = document.getElementById('successMessage');
+				successMessage.classList.add('show');
+				sessionStorage.setItem('loginAttempted', 'true');
+
+				// Auto-fill email
+				const userData = JSON.parse(user);
+				emailInput.value = userData.email;
+			}
+
+			// Load remembered email
+			const rememberedEmail = localStorage.getItem('joureviRememberedEmail');
+			if (rememberedEmail) {
+				emailInput.value = rememberedEmail;
+				rememberMe.checked = true;
+			}
+		});
+
+		// Form validation
+		function validateForm() {
+			let isValid = true;
+
+			// Clear previous error messages
+			document.querySelectorAll('.error-message').forEach(el => {
+				el.classList.remove('show');
+				el.textContent = '';
+			});
+
+			// Validate email
+			const email = emailInput.value.trim();
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!email) {
+				showError('email', 'Email is required');
+				isValid = false;
+			} else if (!emailRegex.test(email)) {
+				showError('email', 'Please enter a valid email address');
+				isValid = false;
+			}
+
+			// Validate password
+			const password = passwordInput.value;
+			if (!password) {
+				showError('password', 'Password is required');
+				isValid = false;
+			}
+
+			return isValid;
+		}
+
+		function showError(fieldName, message) {
+			const field = document.getElementById(fieldName);
+			const errorElement = field.nextElementSibling;
+			if (errorElement && errorElement.classList.contains('error-message')) {
+				errorElement.textContent = message;
+				errorElement.classList.add('show');
+			}
+		}
+
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+
+			if (validateForm()) {
+				const email = emailInput.value;
+				const password = passwordInput.value;
+
+				// Check credentials against stored user
+				const storedUser = localStorage.getItem('joureviUser');
+				if (storedUser) {
+					const userData = JSON.parse(storedUser);
+					
+					// Simple validation (in a real app, this would be server-side)
+					if (userData.email === email) {
+						// Remember email if checkbox is checked
+						if (rememberMe.checked) {
+							localStorage.setItem('joureviRememberedEmail', email);
+						} else {
+							localStorage.removeItem('joureviRememberedEmail');
+						}
+
+						// Simulate successful login
+						const submitBtn = form.querySelector('.submit-btn');
+						const originalText = submitBtn.textContent;
+						submitBtn.textContent = 'Signing in...';
+						submitBtn.disabled = true;
+
+						// Redirect after 1.5 seconds
+						setTimeout(() => {
+							localStorage.setItem('joureviLoggedIn', 'true');
+							window.location.href = 'calendar.html';
+						}, 1500);
+					} else {
+						showError('email', 'Invalid email or password');
+					}
+				} else {
+					showError('email', 'No account found with this email');
+				}
+			}
+		});
+
+		// Real-time validation
+		emailInput.addEventListener('blur', function() {
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!this.value.trim()) {
+				showError('email', 'Email is required');
+			} else if (!emailRegex.test(this.value)) {
+				showError('email', 'Please enter a valid email address');
+			} else {
+				this.nextElementSibling.classList.remove('show');
+			}
+		});
+
+		passwordInput.addEventListener('blur', function() {
+			if (!this.value) {
+				showError('password', 'Password is required');
+			} else {
+				this.nextElementSibling.classList.remove('show');
+			}
+		});
+
+		// Social login handlers
+		function socialLogin(provider) {
+			alert(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login coming soon!`);
+		}
+	</script>
+</body>
+</html>
