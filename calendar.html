@@ -1062,6 +1062,334 @@
 			}
 		}
 
+		/* Journal Writing Modal - Focus Mode */
+		.journal-write-modal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.7);
+			z-index: 2000;
+			animation: fadeIn 0.3s ease-out;
+		}
+
+		.journal-write-modal.active {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.journal-write-container {
+			background: #fff;
+			border-radius: 20px;
+			width: 95vw;
+			max-width: 900px;
+			height: 90vh;
+			display: flex;
+			flex-direction: column;
+			box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+			animation: slideUp 0.4s ease-out;
+		}
+
+		.journal-write-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 30px;
+			border-bottom: 1px solid #e8eef5;
+			background: linear-gradient(135deg, #f8fafc 0%, #fff 100%);
+			border-radius: 20px 20px 0 0;
+		}
+
+		.journal-write-title {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.journal-write-date {
+			font-size: 0.9rem;
+			color: #8b94a5;
+			font-weight: 500;
+			letter-spacing: 0.3px;
+		}
+
+		.journal-write-mood-selector {
+			display: flex;
+			gap: 8px;
+		}
+
+		.journal-write-mood-btn {
+			font-size: 1.5rem;
+			background: none;
+			border: 2px solid #e0e7ef;
+			border-radius: 50%;
+			width: 42px;
+			height: 42px;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.journal-write-mood-btn:hover {
+			transform: scale(1.15);
+		}
+
+		.journal-write-mood-btn.selected {
+			border-color: #4056a1;
+			background: #f0f3f7;
+		}
+
+		.journal-write-close {
+			background: none;
+			border: none;
+			font-size: 1.8rem;
+			cursor: pointer;
+			color: #8b94a5;
+			padding: 0;
+			width: 40px;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.2s ease;
+		}
+
+		.journal-write-close:hover {
+			color: #2b3a67;
+			transform: scale(1.1);
+		}
+
+		.journal-write-toolbar {
+			display: flex;
+			gap: 8px;
+			padding: 12px 30px;
+			background: #f8fafc;
+			border-bottom: 1px solid #e8eef5;
+			flex-wrap: wrap;
+			align-items: center;
+		}
+
+		.toolbar-section {
+			display: flex;
+			gap: 4px;
+			align-items: center;
+			border-right: 1px solid #e0e7ef;
+			padding-right: 8px;
+		}
+
+		.toolbar-section:last-child {
+			border-right: none;
+		}
+
+		.toolbar-btn {
+			background: #fff;
+			border: 1px solid #e0e7ef;
+			color: #4056a1;
+			padding: 8px 12px;
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 0.85rem;
+			font-weight: 500;
+			transition: all 0.2s ease;
+			display: flex;
+			align-items: center;
+			gap: 4px;
+		}
+
+		.toolbar-btn:hover {
+			background: #4056a1;
+			color: #fff;
+			border-color: #4056a1;
+		}
+
+		.toolbar-btn.active {
+			background: #4056a1;
+			color: #fff;
+		}
+
+		.toolbar-separator {
+			width: 1px;
+			height: 20px;
+			background: #e0e7ef;
+			margin: 0 4px;
+		}
+
+		.journal-write-content {
+			flex: 1;
+			display: flex;
+			overflow: hidden;
+		}
+
+		.journal-editor-area {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			padding: 30px;
+			overflow-y: auto;
+		}
+
+		#journalWriteText {
+			flex: 1;
+			border: none;
+			outline: none;
+			font-family: 'Georgia', serif;
+			font-size: 1.05rem;
+			line-height: 1.8;
+			color: #2b3a67;
+			resize: none;
+			caret-color: #4056a1;
+		}
+
+		#journalWriteText::placeholder {
+			color: #cbd5e1;
+			font-style: italic;
+		}
+
+		.journal-editor-preview {
+			flex: 1;
+			padding: 30px;
+			overflow-y: auto;
+			background: #f8fafc;
+			border-left: 1px solid #e8eef5;
+		}
+
+		.journal-write-preview {
+			font-family: 'Georgia', serif;
+			font-size: 1.05rem;
+			line-height: 1.8;
+			color: #2b3a67;
+		}
+
+		.journal-write-preview h1 {
+			font-size: 1.8rem;
+			font-weight: 700;
+			margin: 1.5em 0 0.5em 0;
+		}
+
+		.journal-write-preview h2 {
+			font-size: 1.5rem;
+			font-weight: 700;
+			margin: 1.3em 0 0.4em 0;
+		}
+
+		.journal-write-preview h3 {
+			font-size: 1.2rem;
+			font-weight: 700;
+			margin: 1.1em 0 0.3em 0;
+		}
+
+		.journal-write-preview ul, .journal-write-preview ol {
+			margin: 1em 0;
+			padding-left: 2em;
+		}
+
+		.journal-write-preview li {
+			margin: 0.3em 0;
+		}
+
+		.journal-write-preview img {
+			max-width: 100%;
+			height: auto;
+			border-radius: 8px;
+			margin: 1em 0;
+		}
+
+		.journal-write-preview blockquote {
+			border-left: 4px solid #4056a1;
+			padding-left: 1em;
+			margin: 1em 0;
+			color: #4f5d75;
+			font-style: italic;
+		}
+
+		.journal-image-insert {
+			display: none;
+		}
+
+		.journal-image-preview {
+			max-width: 100%;
+			max-height: 300px;
+			margin: 12px 0;
+			border-radius: 8px;
+		}
+
+		.journal-write-footer {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px 30px;
+			background: #f8fafc;
+			border-top: 1px solid #e8eef5;
+			border-radius: 0 0 20px 20px;
+		}
+
+		.journal-write-stats {
+			display: flex;
+			gap: 20px;
+			font-size: 0.85rem;
+			color: #8b94a5;
+		}
+
+		.journal-write-stat {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+		}
+
+		.journal-write-actions {
+			display: flex;
+			gap: 12px;
+		}
+
+		.journal-write-save {
+			background: #4056a1;
+			color: #fff;
+			border: none;
+			padding: 10px 24px;
+			border-radius: 8px;
+			cursor: pointer;
+			font-weight: 600;
+			transition: all 0.2s ease;
+		}
+
+		.journal-write-save:hover {
+			background: #2b3a67;
+			transform: translateY(-2px);
+			box-shadow: 0 5px 15px rgba(43, 58, 103, 0.3);
+		}
+
+		.journal-write-cancel {
+			background: #e0e7ef;
+			color: #2b3a67;
+			border: none;
+			padding: 10px 24px;
+			border-radius: 8px;
+			cursor: pointer;
+			font-weight: 600;
+			transition: all 0.2s ease;
+		}
+
+		.journal-write-cancel:hover {
+			background: #cbd5e1;
+		}
+
+		.journal-auto-save {
+			font-size: 0.8rem;
+			color: #8b94a5;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.journal-auto-save.saved {
+			color: #10b981;
+		}
+
 		/* Scrollbar */
 		::-webkit-scrollbar {
 			width: 8px;
@@ -1200,33 +1528,14 @@
 							<label>Date</label>
 							<input type="date" id="journalDate" required>
 						</div>
-						<form class="event-form" onsubmit="addJournalEntry(event)">
-							<div class="form-group">
-								<label>How are you feeling?</label>
-								<div class="mood-selector" id="moodSelector">
-									<button type="button" class="mood-btn" data-mood="😊" title="Great">😊</button>
-									<button type="button" class="mood-btn" data-mood="😌" title="Good">😌</button>
-									<button type="button" class="mood-btn" data-mood="😐" title="Okay">😐</button>
-									<button type="button" class="mood-btn" data-mood="😔" title="Sad">😔</button>
-									<button type="button" class="mood-btn" data-mood="😤" title="Frustrated">😤</button>
-								</div>
-								<input type="hidden" id="journalMood">
+						<div class="form-group" style="margin-bottom: 12px;">
+							<label>Tags (press Enter to add)</label>
+							<div class="tags-input-container" id="tagsContainer">
+								<input type="text" class="tags-input" id="tagsInput" placeholder="e.g., work, health, travel...">
 							</div>
-
-							<div class="form-group">
-								<label>Tags (press Enter to add)</label>
-								<div class="tags-input-container" id="tagsContainer">
-									<input type="text" class="tags-input" id="tagsInput" placeholder="e.g., work, health, travel...">
-								</div>
-								<input type="hidden" id="journalTags">
-							</div>
-
-							<div class="form-group">
-								<label>Your Thoughts</label>
-								<textarea id="journalText" placeholder="Write your thoughts, feelings, and reflections for the day..." style="resize: none; height: 140px;" required></textarea>
-							</div>
-							<button type="submit" class="add-event-btn">💾 Save Entry</button>
-						</form>
+							<input type="hidden" id="journalTags">
+						</div>
+						<button type="button" class="add-event-btn" onclick="openJournalWriteModal()">✏️ Start Writing</button>
 					</div>
 
 					<!-- Day Review Card -->
@@ -1244,6 +1553,99 @@
 							<div class="empty-message">No entries yet</div>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Journal Writing Modal - Focus Mode -->
+	<div class="journal-write-modal" id="journalWriteModal">
+		<div class="journal-write-container">
+			<!-- Header -->
+			<div class="journal-write-header">
+				<div class="journal-write-title">
+					<div class="journal-write-date" id="writeDate">Today</div>
+					<div style="font-size: 1.3rem; font-weight: 600; color: #2b3a67;">✏️ Your Thoughts</div>
+				</div>
+				<div class="journal-write-mood-selector" id="writeModalMoodSelector">
+					<button type="button" class="journal-write-mood-btn" data-mood="😊" title="Great">😊</button>
+					<button type="button" class="journal-write-mood-btn" data-mood="😌" title="Good">😌</button>
+					<button type="button" class="journal-write-mood-btn" data-mood="😐" title="Okay">😐</button>
+					<button type="button" class="journal-write-mood-btn" data-mood="😔" title="Sad">😔</button>
+					<button type="button" class="journal-write-mood-btn" data-mood="😤" title="Frustrated">😤</button>
+				</div>
+				<button class="journal-write-close" onclick="closeJournalWriteModal()">×</button>
+			</div>
+
+			<!-- Toolbar -->
+			<div class="journal-write-toolbar">
+				<div class="toolbar-section">
+					<button type="button" class="toolbar-btn" title="Bold (Ctrl+B)" onclick="insertMarkdown('**', '**')">
+						<span style="font-weight: bold;">B</span>
+					</button>
+					<button type="button" class="toolbar-btn" title="Italic (Ctrl+I)" onclick="insertMarkdown('_', '_')">
+						<span style="font-style: italic;">I</span>
+					</button>
+					<button type="button" class="toolbar-btn" title="Underline" onclick="insertMarkdown('<u>', '</u>')">
+						<span style="text-decoration: underline;">U</span>
+					</button>
+				</div>
+
+				<div class="toolbar-section">
+					<button type="button" class="toolbar-btn" title="Heading 1" onclick="insertMarkdown('# ', '')">H1</button>
+					<button type="button" class="toolbar-btn" title="Heading 2" onclick="insertMarkdown('## ', '')">H2</button>
+					<button type="button" class="toolbar-btn" title="Heading 3" onclick="insertMarkdown('### ', '')">H3</button>
+				</div>
+
+				<div class="toolbar-section">
+					<button type="button" class="toolbar-btn" title="Bullet List" onclick="insertMarkdown('• ', '')">• List</button>
+					<button type="button" class="toolbar-btn" title="Numbered List" onclick="insertMarkdown('1. ', '')">1. List</button>
+					<button type="button" class="toolbar-btn" title="Quote" onclick="insertMarkdown('> ', '')">Quote</button>
+				</div>
+
+				<div class="toolbar-section">
+					<button type="button" class="toolbar-btn" title="Insert Link" onclick="insertLink()">🔗 Link</button>
+					<button type="button" class="toolbar-btn" onclick="document.getElementById('journalImageInsert').click()">
+						🖼️ Image
+					</button>
+					<input type="file" id="journalImageInsert" class="journal-image-insert" accept="image/*" onchange="insertImage(event)">
+				</div>
+
+				<div class="toolbar-section">
+					<button type="button" class="toolbar-btn" id="previewToggle" onclick="togglePreview()">👁️ Preview</button>
+				</div>
+			</div>
+
+			<!-- Content Area -->
+			<div class="journal-write-content">
+				<div class="journal-editor-area">
+					<textarea id="journalWriteText" placeholder="Write freely. Express yourself. No judgment, no limits..."></textarea>
+				</div>
+				<div class="journal-editor-preview" id="previewArea" style="display: none;">
+					<div class="journal-write-preview" id="previewContent"></div>
+				</div>
+			</div>
+
+			<!-- Footer -->
+			<div class="journal-write-footer">
+				<div class="journal-write-stats">
+					<div class="journal-write-stat">
+						<span>📊</span>
+						<span id="writeWordCount">0 words</span>
+					</div>
+					<div class="journal-write-stat">
+						<span>🔤</span>
+						<span id="writeCharCount">0 characters</span>
+					</div>
+					<div class="journal-auto-save" id="autoSaveIndicator">
+						<span>⏱️</span>
+						<span>Saving...</span>
+					</div>
+				</div>
+
+				<div class="journal-write-actions">
+					<button class="journal-write-cancel" onclick="closeJournalWriteModal()">Discard</button>
+					<button class="journal-write-save" onclick="saveFromWriteModal()">Save Entry</button>
 				</div>
 			</div>
 		</div>
@@ -1725,36 +2127,202 @@
 			closeModal();
 		}
 
-		function addJournalEntry(e) {
-			e.preventDefault();
+		// Journal Write Modal Functions
+		function openJournalWriteModal() {
+			const date = new Date(document.getElementById('journalDate').value);
+			const dateStr = date.toLocaleDateString('en-US', { 
+				weekday: 'long', 
+				month: 'long', 
+				day: 'numeric' 
+			});
 
+			document.getElementById('writeDate').textContent = dateStr;
+			document.getElementById('journalWriteText').value = '';
+			document.getElementById('previewContent').innerHTML = '';
+			document.getElementById('previewArea').style.display = 'none';
+			document.getElementById('previewToggle').classList.remove('active');
+
+			// Setup mood selector in write modal
+			document.querySelectorAll('.journal-write-mood-btn').forEach(btn => {
+				btn.classList.remove('selected');
+				btn.addEventListener('click', (e) => {
+					e.preventDefault();
+					document.querySelectorAll('.journal-write-mood-btn').forEach(b => b.classList.remove('selected'));
+					btn.classList.add('selected');
+					currentMood = btn.getAttribute('data-mood');
+				});
+			});
+
+			currentMood = null;
+			document.getElementById('journalWriteText').focus();
+			setupWriteModalStats();
+
+			document.getElementById('journalWriteModal').classList.add('active');
+		}
+
+		function closeJournalWriteModal() {
+			document.getElementById('journalWriteModal').classList.remove('active');
+			currentMood = null;
+		}
+
+		function setupWriteModalStats() {
+			const textarea = document.getElementById('journalWriteText');
+			textarea.addEventListener('input', () => {
+				const text = textarea.value;
+				const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+				const chars = text.length;
+
+				document.getElementById('writeWordCount').textContent = words + ' word' + (words !== 1 ? 's' : '');
+				document.getElementById('writeCharCount').textContent = chars + ' character' + (chars !== 1 ? 's' : '');
+
+				// Update preview if visible
+				if (document.getElementById('previewArea').style.display !== 'none') {
+					updatePreview();
+				}
+			});
+		}
+
+		function insertMarkdown(before, after) {
+			const textarea = document.getElementById('journalWriteText');
+			const start = textarea.selectionStart;
+			const end = textarea.selectionEnd;
+			const selectedText = textarea.value.substring(start, end);
+			const beforeText = textarea.value.substring(0, start);
+			const afterText = textarea.value.substring(end);
+
+			const newText = beforeText + before + selectedText + after + afterText;
+			textarea.value = newText;
+			textarea.focus();
+			textarea.selectionStart = start + before.length;
+			textarea.selectionEnd = start + before.length + selectedText.length;
+
+			// Trigger input event for stats update
+			textarea.dispatchEvent(new Event('input'));
+		}
+
+		function insertLink() {
+			const url = prompt('Enter URL:');
+			if (!url) return;
+			insertMarkdown('[', '](' + url + ')');
+		}
+
+		function insertImage(event) {
+			const file = event.target.files[0];
+			if (!file) return;
+
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				const imgData = e.target.result;
+				const textarea = document.getElementById('journalWriteText');
+				const start = textarea.selectionStart;
+				const before = textarea.value.substring(0, start);
+				const after = textarea.value.substring(start);
+
+				textarea.value = before + '\n[Image inserted]\n' + after;
+				textarea.focus();
+
+				// Store image data
+				if (!window.journalImages) window.journalImages = [];
+				window.journalImages.push({ data: imgData, alt: file.name });
+
+				// Show in preview if visible
+				if (document.getElementById('previewArea').style.display !== 'none') {
+					updatePreview();
+				}
+
+				textarea.dispatchEvent(new Event('input'));
+			};
+			reader.readAsDataURL(file);
+		}
+
+		function togglePreview() {
+			const previewArea = document.getElementById('previewArea');
+			const toggle = document.getElementById('previewToggle');
+
+			if (previewArea.style.display === 'none') {
+				previewArea.style.display = 'block';
+				toggle.classList.add('active');
+				updatePreview();
+			} else {
+				previewArea.style.display = 'none';
+				toggle.classList.remove('active');
+			}
+		}
+
+		function updatePreview() {
+			const text = document.getElementById('journalWriteText').value;
+			let html = markdownToHtml(text);
+			document.getElementById('previewContent').innerHTML = html;
+		}
+
+		function markdownToHtml(text) {
+			let html = text;
+
+			// Headers
+			html = html.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+			html = html.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+			html = html.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+
+			// Bold
+			html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+			// Italic
+			html = html.replace(/_(.*?)_/g, '<em>$1</em>');
+
+			// Blockquote
+			html = html.replace(/^> (.*?)$/gm, '<blockquote>$1</blockquote>');
+
+			// Lists
+			html = html.replace(/^\• (.*?)$/gm, '<li>$1</li>');
+			html = html.replace(/^\d+\. (.*?)$/gm, '<li>$1</li>');
+
+			// Line breaks
+			html = html.replace(/\n/g, '<br>');
+
+			// Links
+			html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+			// Images from inserted images
+			if (window.journalImages && window.journalImages.length > 0) {
+				window.journalImages.forEach(img => {
+					html = html.replace('[Image inserted]', `<img src="${img.data}" alt="${img.alt}" class="journal-image-preview">`);
+				});
+			}
+
+			return html;
+		}
+
+		function saveFromWriteModal() {
 			const date = document.getElementById('journalDate').value;
-			const text = document.getElementById('journalText').value;
-			const mood = currentMood;
+			const text = document.getElementById('journalWriteText').value;
+			const mood = currentMood || '📝';
 			const tags = [...currentTags];
 
-			if (!date || !text) return;
+			if (!date || !text.trim()) {
+				alert('Please write something before saving.');
+				return;
+			}
 
 			const entry = {
 				id: Date.now().toString(),
 				date,
 				text,
-				mood: mood || '📝',
-				tags: tags,
+				mood,
+				tags,
 				createdAt: new Date().toISOString()
 			};
 
 			journals.push(entry);
 			saveJournals();
 
-			// Reset form
-			document.getElementById('journalText').value = '';
-			document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+			// Reset
+			closeJournalWriteModal();
 			currentMood = null;
 			currentTags = [];
+			window.journalImages = [];
 			document.getElementById('tagsContainer').innerHTML = '<input type="text" class="tags-input" id="tagsInput" placeholder="e.g., work, health, travel...">';
 			setupTagsInput();
-			
+
 			// Refresh views
 			renderDayReview(new Date(date));
 			renderPastEntries();
@@ -1912,13 +2480,13 @@
 			if (!entry) return;
 
 			document.getElementById('journalDate').value = entry.date;
-			document.getElementById('journalText').value = entry.text;
+			document.getElementById('journalWriteText').value = entry.text;
 
 			// Load mood
 			currentMood = entry.mood || null;
-			document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+			document.querySelectorAll('.journal-write-mood-btn').forEach(b => b.classList.remove('selected'));
 			if (currentMood) {
-				const moodBtn = document.querySelector(`[data-mood="${currentMood}"]`);
+				const moodBtn = document.querySelector(`.journal-write-mood-btn[data-mood="${currentMood}"]`);
 				if (moodBtn) moodBtn.classList.add('selected');
 			}
 
@@ -1927,17 +2495,17 @@
 			renderTags();
 			updateTagsField();
 
-			// Delete the entry
+			// Delete the entry (will be re-saved as new)
 			journals = journals.filter(j => j.id !== entryId);
 			saveJournals();
 
-			// Switch to journal tab and close modal
-			switchSidebarTab('journal');
+			// Open write modal
 			closeModal();
-
-			// Scroll to journal text area
+			switchSidebarTab('journal');
+			
 			setTimeout(() => {
-				document.getElementById('journalText').focus();
+				openJournalWriteModal();
+				document.getElementById('journalWriteText').focus();
 				renderPastEntries();
 			}, 100);
 		}
