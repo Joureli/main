@@ -728,6 +728,34 @@
             font-weight: 600;
         }
 
+        .journal-count {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: rgba(139, 92, 246, 0.8);
+            color: #fff;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 4;
+        }
+
+        .journal-count:hover {
+            background: rgba(139, 92, 246, 1);
+            transform: scale(1.1);
+        }
+
+        .today .journal-count {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
         /* Multi-day event styles */
         .multi-day-event {
             position: absolute;
@@ -2161,6 +2189,97 @@
         body.planner-open {
             padding-right: 320px;
         }
+
+        /* Markdown rendering styles */
+        #modalBody h1, #modalBody h2, #modalBody h3 {
+            margin: 16px 0 8px 0;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        #modalBody h1 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+            padding-bottom: 8px;
+        }
+
+        #modalBody h2 {
+            font-size: 1.25rem;
+        }
+
+        #modalBody h3 {
+            font-size: 1.1rem;
+        }
+
+        #modalBody p {
+            margin: 8px 0;
+        }
+
+        #modalBody strong {
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        #modalBody em {
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        #modalBody u {
+            text-decoration: underline;
+        }
+
+        #modalBody code {
+            background: rgba(99, 102, 241, 0.08);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: var(--primary-light);
+        }
+
+        #modalBody pre {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 8px 0;
+            border-left: 3px solid var(--primary-light);
+        }
+
+        #modalBody pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        #modalBody ul, #modalBody ol {
+            margin: 8px 0 8px 24px;
+        }
+
+        #modalBody li {
+            margin: 4px 0;
+        }
+
+        #modalBody blockquote {
+            border-left: 3px solid var(--primary-light);
+            padding-left: 12px;
+            margin: 8px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        #modalBody a {
+            color: var(--primary-light);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(129, 140, 248, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        #modalBody a:hover {
+            border-bottom-color: var(--primary-light);
+            color: var(--primary);
+        }
     </style>
 </head>
 
@@ -2825,6 +2944,9 @@
                     return currentDay >= eventStart && currentDay <= eventEnd;
                 });
 
+                // Find journals on this day
+                const dayJournals = journals.filter(j => j.date === dateStr);
+
                 // Separate single-day and multi-day events
                 const singleDayEvents = dayEvents.filter(e => e.date === dateStr && (!e.endDate || e.endDate === e.date));
                 const multiDayEvents = dayEvents.filter(e => e.endDate && e.endDate !== e.date);
@@ -2840,6 +2962,15 @@
 						${singleDayEvents.length > 2 ? `<div class="event-count">+${singleDayEvents.length - 2} more</div>` : ''}
 					</div>
 				`;
+
+                // Add journal count badge
+                if (dayJournals.length > 0) {
+                    const journalBadge = document.createElement('div');
+                    journalBadge.className = 'journal-count';
+                    journalBadge.textContent = dayJournals.length;
+                    journalBadge.onclick = (evt) => { evt.stopPropagation(); viewDayJournals(dateStr); };
+                    dayEl.appendChild(journalBadge);
+                }
 
                 // Add multi-day event bars
                 multiDayEvents.forEach(e => {
@@ -2948,8 +3079,9 @@
         }
 
         function selectDate(date) {
-            document.getElementById('eventDate').valueAsDate = date;
-            document.getElementById('journalDate').valueAsDate = date;
+            const dateStr = dateToString(date);
+            document.getElementById('eventDate').value = dateStr;
+            document.getElementById('journalDate').value = dateStr;
             document.getElementById('eventTitle').focus();
             renderDayReview(date);
         }
@@ -3041,7 +3173,7 @@
             document.getElementById('eventEndDate').value = '';
 
             const today = new Date();
-            document.getElementById('eventDate').valueAsDate = today;
+            document.getElementById('eventDate').value = dateToString(today);
         }
 
         function renderUpcomingEvents() {
@@ -3070,6 +3202,110 @@
 					</div>
 				</div>
 			`).join('');
+        }
+
+        function markdownToHtml(markdown) {
+            let html = markdown;
+            
+            // Images - before other patterns
+            html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto; margin: 12px 0; border-radius: 6px;">');
+            
+            // Headers
+            html = html.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+            
+            // Bold
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Italic
+            html = html.replace(/_(.*?)_/g, '<em>$1</em>');
+            
+            // Underline
+            html = html.replace(/<u>(.*?)<\/u>/g, '<u>$1</u>');
+            
+            // Code blocks
+            html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+            
+            // Inline code
+            html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+            
+            // Lists
+            html = html.replace(/^\* (.*?)$/gm, '<li>$1</li>');
+            html = html.replace(/^• (.*?)$/gm, '<li>$1</li>');
+            html = html.replace(/(\<li>.*<\/li>)/s, '<ul>$1</ul>');
+            
+            // Numbered lists
+            html = html.replace(/^(\d+)\. (.*?)$/gm, '<li>$2</li>');
+            
+            // Links
+            html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+            
+            // Blockquotes
+            html = html.replace(/^> (.*?)$/gm, '<blockquote>$1</blockquote>');
+            
+            // Line breaks
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = '<p>' + html + '</p>';
+            
+            return html;
+        }
+
+        function viewDayJournals(dateStr) {
+            const dayJournals = journals.filter(j => j.date === dateStr);
+            
+            if (dayJournals.length === 0) return;
+            
+            const date = new Date(dateStr);
+            const dateDisplay = date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            let content = `<div style="color: #1e293b;">`;
+            
+            dayJournals.forEach((journal, index) => {
+                const createdDate = new Date(journal.createdAt);
+                const timeStr = createdDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                const renderedHtml = markdownToHtml(journal.text);
+                
+                content += `
+                    <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;">
+                            <span>${journal.mood}</span>
+                            <span style="margin-left: 8px;">${timeStr}</span>
+                            ${journal.tags && journal.tags.length > 0 ? `<div style="margin-top: 4px;">${journal.tags.map(tag => `<span style="display: inline-block; background: rgba(99, 102, 241, 0.1); color: var(--text-secondary); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; margin-right: 4px;">#${tag}</span>`).join('')}</div>` : ''}
+                        </div>
+                        <div style="font-size: 0.9rem; line-height: 1.6; color: var(--text-primary);">
+                            ${renderedHtml}
+                        </div>
+                        <button style="margin-top: 8px; padding: 4px 8px; font-size: 0.75rem; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 4px; cursor: pointer;" onclick="editJournal('${journal.id}')">Edit</button>
+                    </div>
+                `;
+            });
+            
+            content += `</div>`;
+            
+            const modal = document.getElementById('eventModal');
+            document.getElementById('modalTitle').textContent = `📔 Journals - ${dateDisplay}`;
+            document.getElementById('modalBody').innerHTML = content;
+            modal.classList.add('active');
+        }
+
+        function editJournal(journalId) {
+            closeModal();
+            const journal = journals.find(j => j.id === journalId);
+            if (!journal) return;
+            
+            editingJournalId = journalId;
+            document.getElementById('journalDate').value = journal.date;
+            document.getElementById('journalWriteText').value = journal.text;
+            currentMood = journal.mood;
+            currentTags = journal.tags || [];
+            
+            openJournalWriteModal();
         }
 
         function viewEvent(eventId, e) {
@@ -3136,61 +3372,56 @@
 
         // Journal Write Modal Functions
         function openJournalWriteModal(entryId = null) {
-            const date = new Date(document.getElementById('journalDate').value);
-            const dateStr = date.toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric'
-            });
+             const date = new Date(document.getElementById('journalDate').value);
+             const dateStr = date.toLocaleDateString('en-US', {
+                 weekday: 'long',
+                 month: 'long',
+                 day: 'numeric'
+             });
 
-            document.getElementById('writeDate').textContent = dateStr;
-            document.getElementById('journalWriteText').value = '';
-            document.getElementById('previewContent').innerHTML = '';
-            document.getElementById('previewArea').style.display = 'none';
-            document.getElementById('previewToggle').classList.remove('active');
+             document.getElementById('writeDate').textContent = dateStr;
+             document.getElementById('previewContent').innerHTML = '';
+             document.getElementById('previewArea').style.display = 'none';
+             document.getElementById('previewToggle').classList.remove('active');
 
-            editingJournalId = entryId || null;
+             // Only set editingJournalId if not already set by editJournal()
+             if (!editingJournalId && entryId) {
+                 editingJournalId = entryId;
+             }
 
-            // Always clear mood and tags for new entry
-            currentMood = null;
-            currentTags = [];
+             // Only clear mood and tags if NOT editing (NOT if editingJournalId is already set)
+             if (!editingJournalId) {
+                 currentMood = null;
+                 currentTags = [];
+                 document.getElementById('journalWriteText').value = '';
+             }
 
-            // Only load data if editing
-            if (entryId) {
-                const entry = journals.find(j => j.id === entryId);
-                if (entry) {
-                    document.getElementById('journalWriteText').value = entry.text;
-                    currentMood = entry.mood || null;
-                    currentTags = entry.tags && entry.tags.length > 0 ? [...entry.tags] : [];
-                }
-            }
+             renderTags();
+             updateTagsField();
 
-            renderTags();
-            updateTagsField();
+             // Setup mood selector in write modal
+             document.querySelectorAll('.journal-write-mood-btn').forEach(btn => {
+                 btn.classList.remove('selected');
+                 btn.addEventListener('click', (e) => {
+                     e.preventDefault();
+                     document.querySelectorAll('.journal-write-mood-btn').forEach(b => b.classList.remove('selected'));
+                     btn.classList.add('selected');
+                     currentMood = btn.getAttribute('data-mood');
+                     saveDraft();
+                 });
+             });
 
-            // Setup mood selector in write modal
-            document.querySelectorAll('.journal-write-mood-btn').forEach(btn => {
-                btn.classList.remove('selected');
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    document.querySelectorAll('.journal-write-mood-btn').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected');
-                    currentMood = btn.getAttribute('data-mood');
-                    saveDraft();
-                });
-            });
+             // Set selected mood if any
+             if (currentMood) {
+                 const selectedBtn = document.querySelector(`.journal-write-mood-btn[data-mood="${currentMood}"]`);
+                 if (selectedBtn) selectedBtn.classList.add('selected');
+             }
 
-            // Set selected mood if any
-            if (currentMood) {
-                const selectedBtn = document.querySelector(`.journal-write-mood-btn[data-mood="${currentMood}"]`);
-                if (selectedBtn) selectedBtn.classList.add('selected');
-            }
+             document.getElementById('journalWriteText').focus();
+             setupWriteModalStats();
 
-            document.getElementById('journalWriteText').focus();
-            setupWriteModalStats();
-
-            document.getElementById('journalWriteModal').classList.add('active');
-        }
+             document.getElementById('journalWriteModal').classList.add('active');
+         }
 
         function closeJournalWriteModal() {
             saveDraft();
@@ -3297,12 +3528,10 @@
                 const before = textarea.value.substring(0, start);
                 const after = textarea.value.substring(start);
 
-                textarea.value = before + '\n[Image inserted]\n' + after;
+                // Insert markdown image syntax with base64 data
+                const altText = file.name.replace(/\.[^/.]+$/, "");
+                textarea.value = before + `\n![${altText}](${imgData})\n` + after;
                 textarea.focus();
-
-                // Store image data
-                if (!window.journalImages) window.journalImages = [];
-                window.journalImages.push({ data: imgData, alt: file.name });
 
                 // Show in preview if visible
                 if (document.getElementById('previewArea').style.display !== 'none') {
@@ -3329,47 +3558,43 @@
         }
 
         function updatePreview() {
-            const text = document.getElementById('journalWriteText').value;
-            let html = markdownToHtml(text);
-            document.getElementById('previewContent').innerHTML = html;
-        }
+             const text = document.getElementById('journalWriteText').value;
+             let html = previewMarkdownToHtml(text);
+             document.getElementById('previewContent').innerHTML = html;
+         }
 
-        function markdownToHtml(text) {
-            let html = text;
+        function previewMarkdownToHtml(markdown) {
+             let html = markdown;
 
-            // Headers
-            html = html.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
-            html = html.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
-            html = html.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+             // Images - before other patterns
+             html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto; margin: 12px 0; border-radius: 6px;">');
 
-            // Bold
-            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+             // Headers
+             html = html.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+             html = html.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+             html = html.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
 
-            // Italic
-            html = html.replace(/_(.*?)_/g, '<em>$1</em>');
+             // Bold
+             html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-            // Blockquote
-            html = html.replace(/^> (.*?)$/gm, '<blockquote>$1</blockquote>');
+             // Italic
+             html = html.replace(/_(.*?)_/g, '<em>$1</em>');
 
-            // Lists
-            html = html.replace(/^\• (.*?)$/gm, '<li>$1</li>');
-            html = html.replace(/^\d+\. (.*?)$/gm, '<li>$1</li>');
+             // Blockquote
+             html = html.replace(/^> (.*?)$/gm, '<blockquote>$1</blockquote>');
 
-            // Line breaks
-            html = html.replace(/\n/g, '<br>');
+             // Lists
+             html = html.replace(/^\• (.*?)$/gm, '<li>$1</li>');
+             html = html.replace(/^\d+\. (.*?)$/gm, '<li>$1</li>');
 
-            // Links
-            html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+             // Line breaks
+             html = html.replace(/\n/g, '<br>');
 
-            // Images from inserted images
-            if (window.journalImages && window.journalImages.length > 0) {
-                window.journalImages.forEach(img => {
-                    html = html.replace('[Image inserted]', `<img src="${img.data}" alt="${img.alt}" class="journal-image-preview">`);
-                });
-            }
+             // Links
+             html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
 
-            return html;
-        }
+             return html;
+         }
 
         function saveFromWriteModal() {
             const date = document.getElementById('journalDate').value;
@@ -3722,7 +3947,7 @@
             document.getElementById('plannerDayTitle').textContent = `📚 ${dateDisplay}`;
 
             // Set the event date field
-            document.getElementById('journalPaneEventDate').valueAsDate = new Date(todayStr);
+            document.getElementById('journalPaneEventDate').value = todayStr;
 
             if (dayEntries.length === 0) {
                 container.innerHTML = '<div class="planner-empty">No entries for this day</div>';
@@ -3839,7 +4064,7 @@
             document.getElementById('plannerDayTitle').textContent = `📚 ${dateDisplay}`;
 
             // Set the event date field
-            document.getElementById('journalPaneEventDate').valueAsDate = new Date(dateStr);
+            document.getElementById('journalPaneEventDate').value = dateStr;
 
             if (dayEntries.length === 0) {
                 container.innerHTML = '<div class="planner-empty">No entries for this day</div>';
