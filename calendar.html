@@ -648,7 +648,7 @@
             background: rgba(248, 250, 252, 0.8);
             border: 1px solid rgba(99, 102, 241, 0.15);
             border-radius: 6px;
-            padding: 2px;
+            padding: 4px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
@@ -682,17 +682,15 @@
         .day-number {
             font-weight: 700;
             font-size: 0.6rem;
-            margin-bottom: 2px;
             color: inherit;
-            order: -1;
+            margin-bottom: 2px;
         }
 
         .day-events {
-            flex: 0;
+            flex: 1;
             overflow: hidden;
             font-size: 0.55rem;
-            max-height: 16px;
-            width: 100%;
+            min-height: 0;
         }
 
         .event-badge {
@@ -700,7 +698,7 @@
             color: var(--text-secondary);
             padding: 1px 3px;
             border-radius: 2px;
-            margin-bottom: 0;
+            margin-bottom: 1px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -710,6 +708,7 @@
             font-size: 0.45rem;
             height: 12px;
             line-height: 10px;
+            display: block;
         }
 
         .today .event-badge {
@@ -723,21 +722,21 @@
         }
 
         .event-count {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-muted);
-            margin-top: 4px;
+            margin-top: 1px;
             font-weight: 600;
         }
 
         /* Multi-day event styles */
         .multi-day-event {
             position: absolute;
-            top: 5px;
+            bottom: 5px;
             left: 5px;
             right: 5px;
-            padding: 7px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
             font-weight: 700;
             color: #fff;
             cursor: pointer;
@@ -3102,11 +3101,12 @@
 
             const modal = document.getElementById('eventModal');
             document.getElementById('modalTitle').textContent = event.title;
+            const timeDisplay = (event.startTime && event.startTime !== '00:00') || (event.time && event.time !== '00:00') ? (event.startTime || event.time) : 'All day';
             document.getElementById('modalBody').innerHTML = `
 				<div style="color: #4f5d75;">
 					<p><strong>${isMultiDay ? 'Date Range:' : 'Date:'}</strong> ${dateStr}${isMultiDay ? ` → ${endDateStr}` : ''}</p>
 					${isMultiDay ? `<p><strong>Duration:</strong> ${daysSpan} day${daysSpan > 1 ? 's' : ''}</p>` : ''}
-					<p><strong>Time:</strong> ${event.time !== '00:00' ? event.time : 'All day'}</p>
+					<p><strong>Time:</strong> ${timeDisplay}</p>
 					<p><strong>Category:</strong> <span style="display: inline-block; background: ${COLORS[event.category]}; color: #fff; padding: 2px 8px; border-radius: 4px; text-transform: capitalize;">${event.category}</span></p>
 					${event.description ? `<p><strong>Description:</strong> ${event.description}</p>` : ''}
 				</div>
